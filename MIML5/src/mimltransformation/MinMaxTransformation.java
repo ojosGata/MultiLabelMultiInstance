@@ -114,4 +114,10 @@ public class MinMaxTransformation implements Transformer {
 	    return rt;
 	}
 
+	@Override
+	public Instances transformDataSet(MIMLInstances dataset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

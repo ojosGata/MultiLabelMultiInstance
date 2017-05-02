@@ -26,9 +26,9 @@ public class exampleMIMLTransformation {
 		Instances dataSet=mimlTrain.getDataSet();
 		System.out.println(dataSet.numInstances());
 		//ari.transformDataset(mimlTrain);
-		MultiLabelInstances result = ari.transformDataset(mimlTrain);
+		Instances result = ari.transformDataSet(mimlTrain);
 		System.out.println("=============Arithmetic=====================");
-		System.out.println(result.getDataSet());
+		System.out.println(result);
 		//System.out.println("=============Arithmetic_Instance=====================");
 		//System.out.println(transformation.arithmeticTransformation(mimlTrain.getBag(1)));
 		//System.out.println("----------------------------");

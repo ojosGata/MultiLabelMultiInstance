@@ -6,5 +6,6 @@ import weka.core.Instances;
 
 public interface Transformer {
 	public MultiLabelInstances transformDataset(MIMLInstances dataset);
+	public Instances transformDataSet(MIMLInstances dataset);
 	public MultiLabelInstances transformInstance(MIMLInstances dataset);
 }
