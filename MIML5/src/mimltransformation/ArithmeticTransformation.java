@@ -22,7 +22,6 @@ public class ArithmeticTransformation implements Transformer {
 		Attribute bagLabel = train.attribute(0);
 		double labelValue;
 		
-		
 		Instances newData = train.attribute(1).relation().stringFreeStructure();
 
 		// insert a bag label attribute at the begining
@@ -42,8 +41,8 @@ public class ArithmeticTransformation implements Transformer {
 			for (int j = 0; j < data.numAttributes(); j++) {
 				double value;
 				value = data.meanOrMode(j);
-			
-				newInst.setValue(attIdx++, value);
+				newInst.setValue(attIdx, value);
+				attIdx++;
 				
 			}
 			newData.add(newInst);
