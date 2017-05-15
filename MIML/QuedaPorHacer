@@ -1,0 +1,18 @@
+*Todos los ficheros deben estar correctamente documentados incluyendo:
+Cabecera de free software Hecho
+Datos de las autoras (Ana, Eva, Amelia) Hecho
+El javadoc de todas las funciones que haya en el fichero
+
+*Actualizar BR para que directamente trabaje con bag Hecho
+*A�adir la transformaci�n LP. Hecho
+*A�adir al tutorial una prueba de la transformacion LP. El resultado se guarda con MLSaver.
+
+*Hay que plantear la experimentaci�n. Debe quedar como un tutorial con comentarios, con paramaetros de programa y un manual de como se cargar�a la librer�a, como se desarrollar�a un nuevo algoritmo,  y como se  ejecutan los ejemplos.
+-Ejemplo de manipulaci�n de datos
+-Ejemplo de crear un clasificador espec�fico MIML: MIMLBinaryRelevance. Incluir experimento train/test (el que ya hay) y crossValidation (el que hay en mulan)
+-Ejemplo de las transformaciones: utilizar la clase MLSaver
+
+*Hay que ir redactando ya el manual t�cnico.
+
+
+*En el exampleMIMLBinaryRelevance quitar el clasificador br. Hecho
