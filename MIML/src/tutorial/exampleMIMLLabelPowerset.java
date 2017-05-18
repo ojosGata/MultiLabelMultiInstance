@@ -16,6 +16,15 @@ package tutorial;
 
 import java.io.File;
 
+import data.MIMLInstances;
+import mimlclassifier.MIMLBinaryRelevance;
+import mimlclassifier.MIMLLabelPowerset;
+import mulan.classifier.transformation.LabelPowerset;
+import mulan.data.MultiLabelInstances;
+import mulan.evaluation.Evaluation;
+import mulan.evaluation.Evaluator;
+import weka.classifiers.Classifier;
+
 /**
  * 
  * Class 
@@ -41,6 +50,56 @@ public class exampleMIMLLabelPowerset {
 
 	public static void main(String[] args) {
 		
+		try{
+			// String arffFileNameTrain = Utils.getOption("f", args);
+			// String xmlFileName = Utils.getOption("x", args);
+			
+
+			String arffFileNameTrain = "data" + File.separator + "miml_text_data_random_80train.arff";
+			String arffFileNameTest = "data" + File.separator + "miml_text_data_random_20test.arff";
+			String xmlFileName = "data" + File.separator + "miml_text_data.xml";
+
+			// Parameter checking
+			if (arffFileNameTrain.isEmpty()) {
+			System.out.println("Arff pathName must be specified.");
+				showUse();
+			}
+			if (arffFileNameTest.isEmpty()) {
+				System.out.println("Arff pathName must be specified.");
+				showUse();
+			}
+			if (xmlFileName.isEmpty()) {
+				System.out.println("Xml pathName must be specified.");
+				showUse();
+			}
+
+			// Loads the dataset
+			System.out.println("Loading the dataset....");
+
+			
+			MIMLInstances mimlTrain =  new MIMLInstances(arffFileNameTrain, xmlFileName);			
+			MIMLInstances mimlTest =  new MIMLInstances(arffFileNameTest, xmlFileName);           
+            Classifier  baseLearner = new weka.classifiers.mi.MIBoost();
+            
+            MIMLLabelPowerset MIMLLP = new MIMLLabelPowerset(baseLearner);            
+           
+            MIMLLP.setDebug(true);
+            MIMLLP.build(mimlTrain);
+            
+            
+            Evaluator eval2 = new Evaluator();
+            Evaluation results2 = eval2.evaluate(MIMLLP, mimlTest, mimlTrain);
+          
+            System.out.println(results2);
+            
+            
+            System.out.println("The program has finished.");
+			
+		}catch (IndexOutOfBoundsException ioobe){
+			System.err.println("Exception: Incorrect index of Bag" );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 	}
 

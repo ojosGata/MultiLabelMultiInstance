@@ -17,8 +17,6 @@ package tutorial;
 import java.io.File;
 import data.MIMLInstances;
 import mimlclassifier.MIMLBinaryRelevance;
-import mulan.classifier.transformation.BinaryRelevance;
-import mulan.data.MultiLabelInstances;
 import mulan.evaluation.Evaluation;
 import mulan.evaluation.Evaluator;
 
@@ -81,10 +79,7 @@ public class exampleMIMLBinaryRelevance {
 
 			
 			MIMLInstances mimlTrain =  new MIMLInstances(arffFileNameTrain, xmlFileName);			
-			MultiLabelInstances mlTrain = new MultiLabelInstances(arffFileNameTrain, xmlFileName);
-			MIMLInstances mimlTest =  new MIMLInstances(arffFileNameTest, xmlFileName); 
-			MultiLabelInstances mlTest =  new MultiLabelInstances(arffFileNameTest, xmlFileName); 
-                      
+			MIMLInstances mimlTest =  new MIMLInstances(arffFileNameTest, xmlFileName);           
             Classifier  baseLearner = new weka.classifiers.mi.MIBoost();
             
             MIMLBinaryRelevance MIMLBR = new MIMLBinaryRelevance(baseLearner);            

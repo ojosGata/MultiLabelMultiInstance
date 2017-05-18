@@ -22,6 +22,7 @@ import transformation.mimlTOml.ArithmeticTransformation;
 import transformation.mimlTOml.GeometricTransformation;
 import transformation.mimlTOml.MiniMaxTransformation;
 import weka.core.Instance;
+import data.MLSaver;
 
 /**
  * 
@@ -57,6 +58,7 @@ public class exampleMIMLtoMLTransformation {
 		String arffFileName = "data" + File.separator + "toy.arff";
 		String xmlFileName = "data" + File.separator + "toy.xml";
 		
+		
 		// Parameter checking
 		if (arffFileName.isEmpty()) {
 			System.out.println("Arff pathName must be specified.");
@@ -73,21 +75,37 @@ public class exampleMIMLtoMLTransformation {
 		MIMLInstances mimlDataSet =  new MIMLInstances(arffFileName, xmlFileName); 
 						
 		System.out.println("=============Arithmetic=====================");
+		String arffFileResultAri = "data" + File.separator + "toyResultAri.arff";
+		String xmlFileResultAri = "data" + File.separator + "toyResultAri.xml";
+		
 		ArithmeticTransformation ari = new ArithmeticTransformation(mimlDataSet);
 		MultiLabelInstances result = ari.transformDataset();
 		Instance instance  = ari.transformInstance(mimlDataSet.getBag(0));
+		MLSaver.saveArff(result, arffFileResultAri);
+		MLSaver.saveXml(result, xmlFileResultAri);
 		
 		System.out.println("=============Geometric=====================");
+		String arffFileResultGeo = "data" + File.separator + "toyResultGeo.arff";
+		String xmlFileResultGeo = "data" + File.separator + "toyResultGeo.xml";
+		
 		GeometricTransformation geo = new GeometricTransformation(mimlDataSet);
 		result = geo.transformDataset();
 		instance = geo.transformInstance(mimlDataSet.getBag(0));
+		MLSaver.saveArff(result, arffFileResultGeo);
+		MLSaver.saveXml(result, xmlFileResultGeo);
+		
 		
 		System.out.println("=============MinMax=====================");
+		String arffFileResultMinMax = "data" + File.separator + "toyResultMinMax.arff";
+		String xmlFileResultMinMax = "data" + File.separator + "toyResultMinMax.xml";
+		
 		MiniMaxTransformation miniMax = new MiniMaxTransformation(mimlDataSet);
 		result = miniMax.transformDataset();
 		instance = miniMax.transformInstance(mimlDataSet.getBag(0));
-
-		//A�adir salvar los datasets a ficheros arff y xml
+		MLSaver.saveArff(result, arffFileResultMinMax);
+		MLSaver.saveXml(result, xmlFileResultMinMax);
+		
+		
 		
 	}
 
