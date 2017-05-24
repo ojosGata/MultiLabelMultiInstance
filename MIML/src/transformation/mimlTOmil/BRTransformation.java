@@ -21,7 +21,8 @@ import weka.core.Instances;
 
 /**
  * 
- * Class 
+ * Class that uses Binary Relevance transformation to convert a MIMLInstances class to a MultiInstances class 
+ *  
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja

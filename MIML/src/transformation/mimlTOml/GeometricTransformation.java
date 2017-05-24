@@ -22,7 +22,9 @@ import weka.core.Instance;
 import weka.core.Instances;
 /**
  * 
- * Class 
+ * Class that inherits from MIMLToML and uses the geometric transformation 
+ * to convert a MIMLIntances class to a MultiLabel. 
+ * 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -31,9 +33,14 @@ import weka.core.Instances;
  *
  */
 public class GeometricTransformation extends MIMLtoML {
-
-	public GeometricTransformation(MIMLInstances dataset) throws Exception
-	{
+	/**
+	 * Constructor
+	 * 
+	 * @param dataset
+	 * 				a MIMLInstances dataset
+	 * @throws Exception
+	 */
+	public GeometricTransformation(MIMLInstances dataset) throws Exception{
 		this.dataset = dataset;
 		this.prepareTemplate();
 		template.setRelationName(dataset.getDataSet().relationName()+"_geometric_transformation");

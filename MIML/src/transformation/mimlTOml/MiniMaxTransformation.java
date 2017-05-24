@@ -24,7 +24,8 @@ import weka.core.Instance;
 import weka.core.Instances;
 /**
  * 
- * Class 
+ * Class that inherits from MIMLToML and uses the minimum and maximum 
+ * transformation to convert a MIMLIntances class to a MultiLabel.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -33,9 +34,14 @@ import weka.core.Instances;
  *
  */
 public class MiniMaxTransformation extends MIMLtoML {
-
+	/**
+	 * Constructor
+	 * 
+	 * @param dataset
+	 * 				a MIMLInstances dataset
+	 * @throws Exception
+	 */
 	public MiniMaxTransformation(MIMLInstances dataset) throws Exception {
-		
 		this.dataset = dataset;
 		prepareTemplate();
 		template.setRelationName(dataset.getDataSet().relationName()+"_minimax_transformation");

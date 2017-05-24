@@ -24,7 +24,7 @@ import weka.core.Instances;
 
 /**
  * 
- * Class 
+ * Class that uses LabelPowerset transformation to convert a MIMLInstances class to a MultiInstances class 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -35,6 +35,12 @@ import weka.core.Instances;
 public class LPTransformation {
 
 	protected LabelPowersetTransformation LPT;
+	/**
+	 * Constructor
+	 */
+	public LPTransformation(){
+		this.LPT = new LabelPowersetTransformation();
+	}
 	/**
      * Returns the format of the transformed instances
      * 

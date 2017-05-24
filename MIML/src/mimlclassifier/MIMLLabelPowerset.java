@@ -24,7 +24,7 @@ import weka.classifiers.Classifier;
 import weka.core.TechnicalInformation;
 
 /**
- * 
+ * Class inheriting from MIMLClassifier to classify MIMLInstances.
  * @author Ana I. Reyes
  * @author Eva Gibaja
  * @author Amelia Zafra

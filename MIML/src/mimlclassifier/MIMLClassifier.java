@@ -32,7 +32,7 @@ import weka.core.SerializedObject;
 import weka.core.TechnicalInformation;
 
 /**
- * 
+ * Abstract class implements MultiLabelLearner and Serializable
  * @author Ana I. Reyes
  * @author Eva Gibaja
  * @author Amelia Zafra

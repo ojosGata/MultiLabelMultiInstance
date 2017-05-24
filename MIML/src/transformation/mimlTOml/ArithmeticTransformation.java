@@ -22,7 +22,8 @@ import weka.core.Instance;
 import weka.core.Instances;
 /**
  * 
- * Class 
+ * Class that inherits from MIMLToML and uses the arithmetic transformation 
+ * to convert a MIMLIntances class to a MultiLabel. 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -31,9 +32,14 @@ import weka.core.Instances;
  *
  */
 public class ArithmeticTransformation extends MIMLtoML {
-
-	public ArithmeticTransformation(MIMLInstances dataset) throws Exception
-	{
+	/**
+	 * Constructor
+	 * 
+	 * @param dataset
+	 * 				a MIMLInstances dataset
+	 * @throws Exception
+	 */
+	public ArithmeticTransformation(MIMLInstances dataset) throws Exception{
 	    this.dataset = dataset;
 		this.prepareTemplate();
 		template.setRelationName(dataset.getDataSet().relationName()+"_arithmetic_transformation");
@@ -41,7 +47,6 @@ public class ArithmeticTransformation extends MIMLtoML {
 
 	@Override
 	public MultiLabelInstances transformDataset() throws Exception {
-
 		Instances newData = new Instances(template);		
 		int labelIndices[] = dataset.getLabelIndices();
 		Instance newInst = new DenseInstance(newData.numAttributes());
@@ -49,8 +54,7 @@ public class ArithmeticTransformation extends MIMLtoML {
 
 		//For all bags in the dataset
 		double nBags = dataset.getNumBags();		
-		for (int i = 0; i < nBags; i++)
-		{		
+		for (int i = 0; i < nBags; i++){		
 		    //retrieves a bag
 			Bag bag = dataset.getBag(i);			
 			//sets the bagLabel
@@ -66,8 +70,7 @@ public class ArithmeticTransformation extends MIMLtoML {
 			}
 			
 			//Insert label information into the instance
-			for(int j=0; j<labelIndices.length; j++)
-			{			
+			for(int j=0; j<labelIndices.length; j++){			
 				newInst.setValue(updatedLabelIndices[j], dataset.getBag(i).value(labelIndices[j]));				
 			}
 			
@@ -96,8 +99,7 @@ public class ArithmeticTransformation extends MIMLtoML {
 		}
 		
 		//Insert label information into the instance
-		for(int j=0; j<labelIndices.length; j++)
-		{			
+		for(int j=0; j<labelIndices.length; j++){			
 			newInst.setValue(updatedLabelIndices[j], bag.value(labelIndices[j]));				
 		}
 		

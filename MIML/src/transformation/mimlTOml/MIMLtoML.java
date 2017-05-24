@@ -23,7 +23,8 @@ import weka.core.Instances;
 
 /**
  * 
- * Class 
+ * Abstract class that prepares the template for a MIMLInstances class to 
+ * pass to a MultiLabel class. From it inherited all kinds of transformations. 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -39,7 +40,10 @@ public abstract class MIMLtoML {
 	protected int updatedLabelIndices[];
 	protected Instances template = null;
 	protected MIMLInstances dataset = null;
-
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	protected void prepareTemplate() throws Exception {
 		int labelIndices[] = dataset.getLabelIndices();
 		Instances bags = dataset.getDataSet();
