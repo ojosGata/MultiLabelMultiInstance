@@ -24,6 +24,7 @@ import mulan.data.MultiLabelInstances;
 import mulan.evaluation.Evaluation;
 import mulan.evaluation.Evaluator;
 import weka.classifiers.Classifier;
+import weka.classifiers.mi.MISMO;
 
 /**
  * 
@@ -79,8 +80,7 @@ public class exampleMIMLLabelPowerset {
 			
 			MIMLInstances mimlTrain =  new MIMLInstances(arffFileNameTrain, xmlFileName);			
 			MIMLInstances mimlTest =  new MIMLInstances(arffFileNameTest, xmlFileName);           
-            Classifier  baseLearner = new weka.classifiers.mi.MIBoost();
-            
+            Classifier baseLearner = new MISMO();
             MIMLLabelPowerset MIMLLP = new MIMLLabelPowerset(baseLearner);            
            
             MIMLLP.setDebug(true);

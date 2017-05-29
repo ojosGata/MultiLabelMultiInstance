@@ -25,6 +25,7 @@ import mulan.data.LabelsBuilder;
 import mulan.data.LabelsBuilderException;
 import mulan.data.LabelsMetaDataImpl;
 import mulan.data.MultiLabelInstances;
+import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 
 /**
@@ -61,7 +62,23 @@ public final class MLSaver {
 		saver.writeBatch();
 		System.out.println("Arff dataset written to " + pathName);
 	}
-
+	/**
+	 * Writes an arff file with an instances dataset.
+	 * 
+	 *
+	 * @param instances
+	 *            A  dataset.
+	 * @param pathName
+	 *            Name and path for file to write.
+	 * @throws java.io.IOException
+	 */
+	public static void saveArff(Instances instances, String pathName) throws IOException {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(instances);
+		saver.setFile(new File(pathName));
+		saver.writeBatch();
+		System.out.println("Arff dataset written to " + pathName);
+	}
 	/**
 	 * Writes an xml file with label definitions of a multi-label dataset. MIML
 	 * format is also supported.
@@ -76,6 +93,22 @@ public final class MLSaver {
 	public static void saveXml(MultiLabelInstances instances, String pathName)
 			throws IOException, LabelsBuilderException {
 		LabelsBuilder.dumpLabels(instances.getLabelsMetaData(), pathName);
+		System.out.println("Xml file written to " + pathName);
+	}
+	
+	/**
+	 * Writes an xml file with label definitions of an instances dataset. 
+	 *
+	 * @param instances
+	 *            A  dataset.
+	 * @param pathName
+	 *            Name and path for file to write.
+	 * @throws java.io.IOException
+	 * @throws mulan.data.LabelsBuilderException
+	 */
+	public static void saveXml(Instances instances, String pathName)
+			throws IOException, LabelsBuilderException {
+		LabelsBuilder.createLabels(pathName);
 		System.out.println("Xml file written to " + pathName);
 	}
 	
