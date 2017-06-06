@@ -28,7 +28,7 @@ import weka.core.Instances;
 
 /**
  * 
- * Class 
+ * Class for basic handling of the transformation MIML to MIL 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja

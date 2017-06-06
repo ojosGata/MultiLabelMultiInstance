@@ -36,7 +36,12 @@ public class MIMLLabelPowerset extends MIMLClassifier{
 	/** For serialization */
 	private static final long serialVersionUID = 1L;
 	private LabelPowerset LP;	
-	
+	/**
+	 * Constructor
+	 * @param baseClassifier
+	 * 					Classifier
+	 * @throws Exception
+	 */
 	public MIMLLabelPowerset(Classifier baseClassifier) throws Exception {
 		super();
 		LP = new LabelPowerset(baseClassifier);

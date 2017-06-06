@@ -26,7 +26,7 @@ import data.MLSaver;
 
 /**
  * 
- * Class 
+ * Class for basic handling of the transformation MIML to ML
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja

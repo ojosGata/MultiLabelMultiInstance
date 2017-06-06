@@ -52,8 +52,10 @@ public class LPTransformation {
 	
     /**
      * 
-     * @param instance the instance to be transformed
-     * @param labelIndices the labels to remove.
+     * @param instance 
+     * 				the instance to be transformed
+     * @param labelIndices 
+     * 				the labels to remove.
      * @return tranformed instance
      * @throws Exception Potential exception thrown. To be handled in an upper level.
      */
@@ -64,7 +66,8 @@ public class LPTransformation {
 	
 	 /**
      * 
-     * @param mlData multi-label data
+     * @param mlData 
+     * 			multi-label data
      * @return the transformed instances
      * @throws Exception Potential exception thrown. To be handled in an upper level.
      */

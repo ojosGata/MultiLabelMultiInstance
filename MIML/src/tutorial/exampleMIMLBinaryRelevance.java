@@ -25,7 +25,7 @@ import weka.classifiers.Classifier;
 
 /**
  * 
- * Class 
+ * Class for basic handling of the classifier Binary Relevance
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja

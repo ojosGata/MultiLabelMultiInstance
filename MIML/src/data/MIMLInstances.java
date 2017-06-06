@@ -117,7 +117,7 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * @param bagIndex
 	 *            Index of bag
 	 * @return a bag or an instance from the index of the dataset
-	 * @throws Exception
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
 	 */
 	public Instances getBagAsInstances(int bagIndex) throws Exception {
 		if (bagIndex > this.getNumBags())
@@ -190,7 +190,7 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * @param bagIndex
 	 *            A bag index
 	 * @return int
-	 * @throws Exception
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
 	 */
 	public int getNumInstances(int bagIndex) throws Exception {
 		return this.getBag(bagIndex).relationalValue(1).numInstances();

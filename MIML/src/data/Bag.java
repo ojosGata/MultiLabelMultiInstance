@@ -39,6 +39,7 @@ public class Bag extends DenseInstance implements Instance{
     
 	/**Constructor.
 	 * @param instance
+	 * 				The instance become a Bag
 	 */
 	public Bag(Instance instance) throws Exception {	    
 	    super(instance);
@@ -47,10 +48,13 @@ public class Bag extends DenseInstance implements Instance{
 	    m_Dataset = instance.dataset();	  
 	}	
 	
-	/**Returns an instance of the bag.
+	/**
+	 * Returns an instance of the bag.
 	 * 
 	 * @param  bagIndex
-	 * @return Instance
+	 * 			The number of index 
+	 * @return Instance 
+	 * 			
 	 */
 	public Instance getInstance(int bagIndex)
 	{		
@@ -91,7 +95,7 @@ public class Bag extends DenseInstance implements Instance{
 	 * Identification of bag and information about labels is not included.
 	 * 
 	 * @return Instances
-	 * @throws Exception
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
 	 */
 	public Instances getBagAsInstances() throws Exception {				 
 			Instances bags = this.relationalValue(1);

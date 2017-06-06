@@ -28,7 +28,7 @@ import weka.classifiers.mi.MISMO;
 
 /**
  * 
- * Class 
+ * Class for basic handling of the classifier Label Powerset 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja

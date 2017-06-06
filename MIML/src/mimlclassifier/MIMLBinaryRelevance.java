@@ -38,15 +38,20 @@ public class MIMLBinaryRelevance extends MIMLClassifier{
 	
 	/** For serialization */
 	private static final long serialVersionUID = 1L;
+	/** The BinaryRelevance for the classifier	 */
 	private BinaryRelevance BR;	
 
-	
+	/**
+	 * Constructor
+	 * @param baseClassifier
+	 * 					Classifier
+	 * @throws Exception
+	 */
 	public MIMLBinaryRelevance(Classifier baseClassifier) throws Exception {
 		super();
 		BR = new BinaryRelevance(baseClassifier);
 	}
 
-	
 	public void buildInternal(MIMLInstances dataSet) throws Exception{
 		MultiLabelInstances mlData = new MultiLabelInstances(dataSet.getDataSet(), dataSet.getLabelsMetaData());
 		BR.setDebug(getDebug());

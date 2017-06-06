@@ -37,7 +37,7 @@ public class ArithmeticTransformation extends MIMLtoML {
 	 * 
 	 * @param dataset
 	 * 				a MIMLInstances dataset
-	 * @throws Exception
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
 	 */
 	public ArithmeticTransformation(MIMLInstances dataset) throws Exception{
 	    this.dataset = dataset;

@@ -40,7 +40,6 @@ public class BRTransformation {
 	 *
 	 * @param data
 	 *            a MIMLInstances dataset
-	 * @return
 	 */
 	public BRTransformation(MIMLInstances dataSet) {
 		this.BRT = new BinaryRelevanceTransformation(dataSet);
@@ -85,7 +84,6 @@ public class BRTransformation {
 	 * @throws Exception
 	 *             when removal fails
 	 */
-	//Modificación de Instances train por Bag train. Dentro del return he puesto train.dataset()
 	public static Instances transformBags(Bag train, int[] labelIndices, int indexToKeep) throws Exception {
 	   return BinaryRelevanceTransformation.transformInstances(train.dataset(), labelIndices, indexToKeep);
 	}

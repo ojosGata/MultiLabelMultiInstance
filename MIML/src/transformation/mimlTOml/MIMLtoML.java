@@ -33,16 +33,33 @@ import weka.core.Instances;
  *
  */
 public abstract class MIMLtoML {
+	/**
+	 * Abstract method to implement in transformation classes. Transform in
+	 * a MultiLabel Instances
+	 * 
+	 * @return a MultiLabel Instances 
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 */
 	public abstract MultiLabelInstances transformDataset() throws Exception;
-
+	/**
+	 * Abstract method to implement in transformation classes. Transform a bag class in
+	 * an instance
+	 * @param bag
+	 * 			a bag of data set that transform in an instance
+	 * @return  a transformed instance
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 */
 	public abstract Instance transformInstance(Bag bag) throws Exception;
-
+	/** array of updated label indices	 */
 	protected int updatedLabelIndices[];
+	/** Template for save an instances*/
 	protected Instances template = null;
+	/** Data set for save a MIMLInstances*/ 
 	protected MIMLInstances dataset = null;
 	/**
+	 * Prepare Template for make the transformation MIML to ML.
 	 * 
-	 * @throws Exception
+	 * @throws Exception Potential exception thrown. To be handled in an upper level.
 	 */
 	protected void prepareTemplate() throws Exception {
 		int labelIndices[] = dataset.getLabelIndices();
