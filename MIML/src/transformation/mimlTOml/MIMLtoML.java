@@ -23,8 +23,7 @@ import weka.core.Instances;
 
 /**
  * 
- * Abstract class that prepares the template for a MIMLInstances class to 
- * pass to a MultiLabel class. From it inherited all kinds of transformations. 
+ * Abstract class to transform MIMLInstances into MultiLabelInstances.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -33,33 +32,65 @@ import weka.core.Instances;
  *
  */
 public abstract class MIMLtoML {
+
+	/** Array of updated label indices */
+	protected int updatedLabelIndices[];
+	/** Template to store Instances */
+	protected Instances template = null;
+	/** Original data set of MIMLInstances */
+	protected MIMLInstances dataset = null;
+
 	/**
-	 * Abstract method to implement in transformation classes. Transform in
-	 * a MultiLabel Instances
+	 * Transforms {@link MIMLInstances} into MultiLabelInstances.
 	 * 
-	 * @return a MultiLabel Instances 
-	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 * @return MultiLabelInstances.
+	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public abstract MultiLabelInstances transformDataset() throws Exception;
+
 	/**
-	 * Abstract method to implement in transformation classes. Transform a bag class in
-	 * an instance
+	 * Transforms {@link Bag} into Instance.
+	 * 
 	 * @param bag
-	 * 			a bag of data set that transform in an instance
-	 * @return  a transformed instance
-	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 *            The Bag to be transformed.
+	 * @return Instance
+	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public abstract Instance transformInstance(Bag bag) throws Exception;
-	/** array of updated label indices	 */
-	protected int updatedLabelIndices[];
-	/** Template for save an instances*/
-	protected Instances template = null;
-	/** Data set for save a MIMLInstances*/ 
-	protected MIMLInstances dataset = null;
+
 	/**
-	 * Prepare Template for make the transformation MIML to ML.
+	 * Prepares a template to perform the transformation from MIMLInstances to
+	 * MultiLabelInstances. This template includes: the bag label attribute, all
+	 * attributes in the relational attribute as independent attributes and
+	 * label attributes. For instance, in the relation above, the resulting
+	 * template is showed.
 	 * 
-	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
+	 * 
+	 * &#064;relation template<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
+	 * 
+	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	protected void prepareTemplate() throws Exception {
 		int labelIndices[] = dataset.getLabelIndices();
@@ -79,17 +110,15 @@ public abstract class MIMLtoML {
 		}
 	}
 
-	
-
 	/**
-	 * Get the minimal and maximal value of a certain attribute in a certain
-	 * data
+	 * Get the minimal and maximal value of a certain attribute in a data set.
 	 *
 	 * @param data
-	 *            the data
+	 *            The data set.
 	 * @param attIndex
-	 *            the index of the attribute
-	 * @return the double array containing in entry 0 for min and 1 for max.
+	 *            The index of the attribute.
+	 * @return double[] containing in position 0 the min value and in position 1
+	 *         the max value.
 	 */
 	public static double[] minimax(Instances data, int attIndex) {
 		double[] rt = { Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY };

@@ -16,11 +16,10 @@ package tutorial;
 
 import java.io.File;
 
+import data.Bag;
 import data.MIMLInstances;
-import mimlclassifier.MIMLBinaryRelevance;
 import mimlclassifier.MIMLLabelPowerset;
-import mulan.classifier.transformation.LabelPowerset;
-import mulan.data.MultiLabelInstances;
+import mulan.classifier.MultiLabelOutput;
 import mulan.evaluation.Evaluation;
 import mulan.evaluation.Evaluator;
 import weka.classifiers.Classifier;
@@ -28,7 +27,7 @@ import weka.classifiers.mi.MISMO;
 
 /**
  * 
- * Class for basic handling of the classifier Label Powerset 
+ * Class for basic handling of the classifier {@link MIMLLabelPowerset}.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -48,13 +47,11 @@ public class exampleMIMLLabelPowerset {
 		System.exit(-1);
 	}
 
-
 	public static void main(String[] args) {
-		
-		try{
+
+		try {
 			// String arffFileNameTrain = Utils.getOption("f", args);
 			// String xmlFileName = Utils.getOption("x", args);
-			
 
 			String arffFileNameTrain = "data" + File.separator + "miml_text_data_random_80train.arff";
 			String arffFileNameTest = "data" + File.separator + "miml_text_data_random_20test.arff";
@@ -62,7 +59,7 @@ public class exampleMIMLLabelPowerset {
 
 			// Parameter checking
 			if (arffFileNameTrain.isEmpty()) {
-			System.out.println("Arff pathName must be specified.");
+				System.out.println("Arff pathName must be specified.");
 				showUse();
 			}
 			if (arffFileNameTest.isEmpty()) {
@@ -77,29 +74,33 @@ public class exampleMIMLLabelPowerset {
 			// Loads the dataset
 			System.out.println("Loading the dataset....");
 
-			
-			MIMLInstances mimlTrain =  new MIMLInstances(arffFileNameTrain, xmlFileName);			
-			MIMLInstances mimlTest =  new MIMLInstances(arffFileNameTest, xmlFileName);           
-            Classifier baseLearner = new MISMO();
-            MIMLLabelPowerset MIMLLP = new MIMLLabelPowerset(baseLearner);            
-           
-            MIMLLP.setDebug(true);
-            MIMLLP.build(mimlTrain);
-            
-            
-            Evaluator eval2 = new Evaluator();
-            Evaluation results2 = eval2.evaluate(MIMLLP, mimlTest, mimlTrain);
-          
-            System.out.println(results2);
-            
-            
-            System.out.println("The program has finished.");
-			
-		}catch (IndexOutOfBoundsException ioobe){
-			System.err.println("Exception: Incorrect index of Bag" );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			MIMLInstances mimlTrain = new MIMLInstances(arffFileNameTrain, xmlFileName);
+			MIMLInstances mimlTest = new MIMLInstances(arffFileNameTest, xmlFileName);
+
+			Classifier baseLearner = new MISMO();
+			MIMLLabelPowerset MIMLLP = new MIMLLabelPowerset(baseLearner);
+
+			MIMLLP.setDebug(true);
+			MIMLLP.build(mimlTrain);
+
+			// Evaluates a single instance
+			Bag bag = mimlTrain.getBag(1);
+			MultiLabelOutput prediction = MIMLLP.makePrediction(bag);
+			System.out.println("\nPrediction on a single instance:\n\t" + prediction.toString());
+
+			// Performs a train-test evaluation
+			Evaluator evalTT = new Evaluator();
+			System.out.println("\nPerforming train-test evaluation:\n");
+			Evaluation resultsTT = evalTT.evaluate(MIMLLP, mimlTest, mimlTrain);
+			System.out.println("\nResults on train test evaluation:\n" + resultsTT);
+
+			System.out.println("The program has finished.");
+
+		} catch (IndexOutOfBoundsException ioobe) {
+			System.err.println("Exception: Incorrect index of Bag");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

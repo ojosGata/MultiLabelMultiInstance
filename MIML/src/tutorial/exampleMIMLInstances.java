@@ -23,10 +23,9 @@ import data.statistics.MLStatistics;
 import mulan.data.InvalidDataFormatException;
 import weka.core.Instance;
 
-
 /**
  * 
- * Class implementing basic handling of miml datasets.
+ * Class implementing basic handling of MIML datasets.
  * 
  * @author Ana I.Reyes Melero
  * @author Eva Gibaja
@@ -54,8 +53,8 @@ public class exampleMIMLInstances {
 
 			// String arffFileName = Utils.getOption("f", args);
 			// String xmlFileName = Utils.getOption("x", args);
-			// String arffFileName = "data+File.separator+miml_03_data.arff";
-			// String xmlFileName = "data+File.separator+miml_03_data.xml";
+			// String arffFileName = "data+File.separator+miml_text_data.arff";
+			// String xmlFileName = "data+File.separator+miml_text_data.xml";
 
 			String arffFileName = "data" + File.separator + "toy.arff";
 			String xmlFileName = "data" + File.separator + "toy.xml";
@@ -78,7 +77,7 @@ public class exampleMIMLInstances {
 			System.out.println("Number of Instances (bags): " + mimlDataSet.getNumInstances());
 			System.out.println("Number of Labels: " + mimlDataSet.getNumLabels());
 			System.out.println("Number of Attributes: " + mimlDataSet.getNumAttributes());
-			System.out.println("Number of AttributesPerBag: " + mimlDataSet.getNumAtributtesPerBag());
+			System.out.println("Number of AttributesPerBag: " + mimlDataSet.getNumAttributesInABag());
 			System.out.println("Number of AttributesWithRelational: " + mimlDataSet.getNumAttributesWithRelational());
 
 			// Shows all bags in the dataset
@@ -103,7 +102,7 @@ public class exampleMIMLInstances {
 				}
 			}
 
-			// Shows multi-label metrics			
+			// Shows multi-label metrics
 			MLStatistics statsML = new MLStatistics();
 			statsML.calculateStats(mimlDataSet);
 			System.out.println(statsML.toString());

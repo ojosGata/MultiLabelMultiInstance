@@ -22,11 +22,11 @@ import mulan.classifier.MultiLabelOutput;
 import mulan.classifier.transformation.BinaryRelevance;
 import mulan.data.MultiLabelInstances;
 import weka.classifiers.Classifier;
-import weka.core.TechnicalInformation;
 
 /**
  * 
- * Class inheriting from MIMLClassifier to classify MIMLInstances.
+ * Class implementing the BR algorithm for MIML data. A classifier is built for
+ * each label and predictions are also gathered for each label.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -34,38 +34,36 @@ import weka.core.TechnicalInformation;
  * @version 20170507
  *
  */
-public class MIMLBinaryRelevance extends MIMLClassifier{
-	
+public class MIMLBinaryRelevance extends MIMLClassifier {
+
 	/** For serialization */
 	private static final long serialVersionUID = 1L;
-	/** The BinaryRelevance for the classifier	 */
-	private BinaryRelevance BR;	
+
+	/** A BinaryRelevance classifier */
+	private BinaryRelevance BR;
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 * 
 	 * @param baseClassifier
-	 * 					Classifier
+	 *            Classifier
 	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public MIMLBinaryRelevance(Classifier baseClassifier) throws Exception {
 		super();
 		BR = new BinaryRelevance(baseClassifier);
 	}
 
-	public void buildInternal(MIMLInstances dataSet) throws Exception{
+	@Override
+	public void buildInternal(MIMLInstances dataSet) throws Exception {
 		MultiLabelInstances mlData = new MultiLabelInstances(dataSet.getDataSet(), dataSet.getLabelsMetaData());
 		BR.setDebug(getDebug());
 		BR.build(mlData);
 	}
 
 	@Override
-	public TechnicalInformation getTechnicalInformation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected MultiLabelOutput makePredictionInternal(Bag bag) throws Exception, InvalidDataException {		
+	protected MultiLabelOutput makePredictionInternal(Bag bag) throws Exception, InvalidDataException {
 		return BR.makePrediction(bag);
 	}
 

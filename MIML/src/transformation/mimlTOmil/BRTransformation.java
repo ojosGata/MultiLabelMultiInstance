@@ -13,6 +13,7 @@
  *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 package transformation.mimlTOmil;
+
 import data.Bag;
 import data.MIMLInstances;
 import mulan.transformations.BinaryRelevanceTransformation;
@@ -21,8 +22,9 @@ import weka.core.Instances;
 
 /**
  * 
- * Class that uses Binary Relevance transformation to convert a MIMLInstances class to a MultiInstances class 
- *  
+ * Class that uses Binary Relevance transformation to convert MIMLInstances to
+ * MIL Instances with relational attribute.
+ * 
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -32,76 +34,96 @@ import weka.core.Instances;
  */
 public class BRTransformation {
 
+	/** Binary Relevance Transformation */
 	protected BinaryRelevanceTransformation BRT;
 
+	/** MIML dataSet */
+	protected MIMLInstances dataSet;
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
 	 *
-	 * @param data
-	 *            a MIMLInstances dataset
+	 * @param dataSet
+	 *            MIMLInstances dataset
 	 */
 	public BRTransformation(MIMLInstances dataSet) {
+		this.dataSet = dataSet;
 		this.BRT = new BinaryRelevanceTransformation(dataSet);
 	}
 
 	/**
-	 * Remove all label attributes except labelToKeep
+	 * Removes all label attributes except labelToKeep.
 	 *
 	 * @param instance
-	 *            the instance from which labels are to be removed
+	 *            The instance from which labels are to be removed.
 	 * @param labelToKeep
-	 *            the label to keep
-	 * @return transformed Instance
+	 *            The label to keep. A value in [0, numLabels-1].
+	 * @return Instance
 	 */
 	public Instance transformBag(Bag instance, int labelToKeep) {
 		return BRT.transformInstance(instance, labelToKeep);
 	}
 
 	/**
-	 * Remove all label attributes except labelToKeep
+	 * Removes all label attributes except labelToKeep.
+	 *
+	 * @param bagIndex
+	 *            The bagIndex of the Bag to be transformed.
+	 * @param labelToKeep
+	 *            The label to keep. A value in [0, numLabels-1].
+	 * @return Instance
+	 * @throws Exception
+	 *             To be handled in upper level.
+	 */
+	public Instance transformBag(int bagIndex, int labelToKeep) throws Exception {
+		return BRT.transformInstance(dataSet.getBag(bagIndex), labelToKeep);
+	}
+
+	/**
+	 * Remove all label attributes except label at position indexToKeep.
+	 *
+	 * @param instance
+	 *            The instance from which labels are to be removed.
+	 * @param labelIndices
+	 *            Array storing, for each label its corresponding label index.
+	 * @param indexToKeep
+	 *            The label index to keep.
+	 * @return transformed Instance.
+	 * 
+	 */
+	public static Instance transformBag(Bag instance, int[] labelIndices, int indexToKeep) {
+		return BinaryRelevanceTransformation.transformInstance(instance, labelIndices, indexToKeep);
+	}
+
+	/**
+	 * Remove all label attributes except labelToKeep.
 	 *
 	 * @param labelToKeep
-	 *            the label to keep
-	 * @return transformed Instances object
+	 *            The label to keep. A value in [0, numLabels-1].
+	 * @return Instances
 	 * @throws Exception
-	 *             when removal fails
+	 *             To be handled in an upper level.
 	 */
 	public Instances transformBags(int labelToKeep) throws Exception {
-       return BRT.transformInstances(labelToKeep);
+		return BRT.transformInstances(labelToKeep);
 	}
 
 	/**
 	 * Remove all label attributes except that at indexOfLabelToKeep
 	 *
-	 * @param train
-	 *            -
+	 * @param dataSet
+	 *            A MIMLInstances dataset.
 	 * @param labelIndices
-	 *            -
+	 *            Array storing, for each label its corresponding label index.
 	 * @param indexToKeep
-	 *            the label to keep
-	 * @return transformed Instances object
+	 *            The label index to keep.
+	 * @return Instances
 	 * @throws Exception
-	 *             when removal fails
+	 *             when removal fails.
 	 */
-	public static Instances transformBags(Bag train, int[] labelIndices, int indexToKeep) throws Exception {
-	   return BinaryRelevanceTransformation.transformInstances(train.dataset(), labelIndices, indexToKeep);
+	public static Instances transformBags(MIMLInstances dataSet, int[] labelIndices, int indexToKeep) throws Exception {
+		return BinaryRelevanceTransformation.transformInstances(dataSet.getDataSet(), labelIndices, indexToKeep);
 	}
 
-	/**
-	 * Remove all label attributes except label at position indexToKeep
-	 *
-	 * @param instance
-	 *            the instance from which labels are to be removed
-	 * @param labelIndices
-	 *            the label indices to remove
-	 * @param indexToKeep
-	 *            the label to keep
-	 * @return transformed Instance
-	 * 
-	 * 
-	 */
-	public static Instance transformBag(Bag instance, int[] labelIndices, int indexToKeep) {
-       return BinaryRelevanceTransformation.transformInstance(instance, labelIndices, indexToKeep);
-	}
 }

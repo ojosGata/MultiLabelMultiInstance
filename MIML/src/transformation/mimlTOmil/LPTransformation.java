@@ -15,7 +15,6 @@
 
 package transformation.mimlTOmil;
 
-
 import data.Bag;
 import data.MIMLInstances;
 import mulan.transformations.LabelPowersetTransformation;
@@ -24,7 +23,8 @@ import weka.core.Instances;
 
 /**
  * 
- * Class that uses LabelPowerset transformation to convert a MIMLInstances class to a MultiInstances class 
+ * Class that uses LabelPowerset transformation to convert MIMLInstances to MIL
+ * Instances with relational attribute.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -34,45 +34,49 @@ import weka.core.Instances;
  */
 public class LPTransformation {
 
+	/** LabelPowerSetTransformation */
 	protected LabelPowersetTransformation LPT;
+
 	/**
 	 * Constructor
 	 */
-	public LPTransformation(){
+	public LPTransformation() {
 		this.LPT = new LabelPowersetTransformation();
 	}
+
 	/**
-     * Returns the format of the transformed instances
-     * 
-     * @return the format of the transformed instances
-     */
-    public LabelPowersetTransformation getLPT() {
-        return LPT;
-    }
-	
-    /**
-     * 
-     * @param instance 
-     * 				the instance to be transformed
-     * @param labelIndices 
-     * 				the labels to remove.
-     * @return tranformed instance
-     * @throws Exception Potential exception thrown. To be handled in an upper level.
-     */
-	public Instance transformBag(Bag instance, int [] labelIndices) throws Exception {
-		return LPT.transformInstance(instance,  labelIndices);
+	 * Returns the format of the transformed instances
+	 * 
+	 * @return the format of the transformed instances
+	 */
+	public LabelPowersetTransformation getLPT() {
+		return LPT;
 	}
-	
-	
-	 /**
-     * 
-     * @param mlData 
-     * 			multi-label data
-     * @return the transformed instances
-     * @throws Exception Potential exception thrown. To be handled in an upper level.
-     */
-	public Instances transformBags(MIMLInstances train) throws Exception {
-       return LPT.transformInstances(train);
+
+	/**
+	 * 
+	 * @param bag
+	 *            The bag to be transformed.
+	 * @param labelIndices
+	 *            The labels to remove.
+	 * @return Instance
+	 * @throws Exception
+	 *             To be handled in an upper level.
+	 */
+	public Instance transformBag(Bag bag, int[] labelIndices) throws Exception {
+		return LPT.transformInstance(bag, labelIndices);
 	}
-	
+
+	/**
+	 * 
+	 * @param dataSet
+	 *            MIMLInstances dataSet.
+	 * @return Instances
+	 * @throws Exception
+	 *             To be handled in an upper level.
+	 */
+	public Instances transformBags(MIMLInstances dataSet) throws Exception {
+		return LPT.transformInstances(dataSet);
+	}
+
 }

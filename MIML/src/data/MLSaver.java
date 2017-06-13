@@ -54,6 +54,7 @@ public final class MLSaver {
 	 * @param pathName
 	 *            Name and path for file to write.
 	 * @throws java.io.IOException
+	 *             To be handled in an upper level.
 	 */
 	public static void saveArff(MultiLabelInstances instances, String pathName) throws IOException {
 		ArffSaver saver = new ArffSaver();
@@ -62,15 +63,17 @@ public final class MLSaver {
 		saver.writeBatch();
 		System.out.println("Arff dataset written to " + pathName);
 	}
+
 	/**
-	 * Writes an arff file with an instances dataset.
+	 * Writes an arff file with an Instances dataset.
 	 * 
 	 *
 	 * @param instances
-	 *            A  dataset.
+	 *            A dataset.
 	 * @param pathName
 	 *            Name and path for file to write.
 	 * @throws java.io.IOException
+	 *             To be handled in an upper level.
 	 */
 	public static void saveArff(Instances instances, String pathName) throws IOException {
 		ArffSaver saver = new ArffSaver();
@@ -79,6 +82,7 @@ public final class MLSaver {
 		saver.writeBatch();
 		System.out.println("Arff dataset written to " + pathName);
 	}
+
 	/**
 	 * Writes an xml file with label definitions of a multi-label dataset. MIML
 	 * format is also supported.
@@ -88,35 +92,38 @@ public final class MLSaver {
 	 * @param pathName
 	 *            Name and path for file to write.
 	 * @throws java.io.IOException
+	 *             To be handled in an upper level.
 	 * @throws mulan.data.LabelsBuilderException
+	 *             To be handled in an upper level.
 	 */
 	public static void saveXml(MultiLabelInstances instances, String pathName)
 			throws IOException, LabelsBuilderException {
 		LabelsBuilder.dumpLabels(instances.getLabelsMetaData(), pathName);
 		System.out.println("Xml file written to " + pathName);
 	}
-	
+
 	/**
-	 * Writes an xml file with label definitions of an instances dataset. 
+	 * Writes an xml file with label definitions of an instances dataset.
 	 *
 	 * @param instances
-	 *            A  dataset.
+	 *            A dataset.
 	 * @param pathName
 	 *            Name and path for file to write.
 	 * @throws java.io.IOException
+	 *             To be handled in an upper level.
 	 * @throws mulan.data.LabelsBuilderException
+	 *             To be handled in an upper level.
 	 */
-	public static void saveXml(Instances instances, String pathName)
-			throws IOException, LabelsBuilderException {
+	public static void saveXml(Instances instances, String pathName) throws IOException, LabelsBuilderException {
 		LabelsBuilder.createLabels(pathName);
 		System.out.println("Xml file written to " + pathName);
 	}
-	
+
 	/**
 	 * Writes an xml file.
 	 *
 	 * @param labelNames
-	 *            An ArrayList<String> with label names.
+	 *            An ArrayList&lt;String&gt; with label names.
 	 * @param pathName
 	 *            Name and path for file to write.
 	 */

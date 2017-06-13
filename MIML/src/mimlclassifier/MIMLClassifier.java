@@ -29,10 +29,10 @@ import mulan.data.MultiLabelInstances;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SerializedObject;
-import weka.core.TechnicalInformation;
 
 /**
- * Abstract class implements MultiLabelLearner and Serializable
+ * Abstract class for a MIMLClassifier.
+ * 
  * @author Ana I. Reyes
  * @author Eva Gibaja
  * @author Amelia Zafra
@@ -46,8 +46,8 @@ public abstract class MIMLClassifier implements MultiLabelLearner, Serializable 
 	private static final long serialVersionUID = 1L;
 	protected boolean isModelInitialized = false;
 	/**
-	 * The number of labels the learner can handle. The number of labels are
-	 * determined form the training data when learner is build.
+	 * The number of labels the learner can handle. The number of labels is
+	 * determined from the training data when learner is build.
 	 */
 	protected int numLabels;
 	/**
@@ -69,14 +69,17 @@ public abstract class MIMLClassifier implements MultiLabelLearner, Serializable 
 	 * {@link Instances} object of the training data in increasing order.
 	 */
 	protected int[] featureIndices;
+
 	/** Whether debugging is on/off */
 	private boolean isDebug = false;
 
+	@Override
 	public boolean isUpdatable() {
-		/** as default learners are assumed not to be updatable */
+		/** as default learners are assumed not to be updatable. */
 		return false;
 	}
 
+	@Override
 	public final void build(MultiLabelInstances trainingSet) throws Exception {
 		if (trainingSet == null) {
 			throw new ArgumentNullException("trainingSet");
@@ -89,35 +92,11 @@ public abstract class MIMLClassifier implements MultiLabelLearner, Serializable 
 		labelNames = trainingSet.getLabelNames();
 		featureIndices = trainingSet.getFeatureIndices();
 
-		//FALLA SI EN LUGAR DE CREAR UN NUEVO OBJETO SE HACE UN CASTING
-		buildInternal(new MIMLInstances(trainingSet.getDataSet(), trainingSet.getLabelsMetaData()));  
+		buildInternal(new MIMLInstances(trainingSet.getDataSet(), trainingSet.getLabelsMetaData()));
 		isModelInitialized = true;
 	}
 
-	/**
-	 * Learner specific implementation of building the model from
-	 * {@link MultiLabelInstances} training data set. This method is called from
-	 * {@link #build(MultiLabelInstances)} method, where behavior common across
-	 * all learners is applied.
-	 *
-	 * @param trainingSet
-	 *            the training data set
-	 * @throws Exception
-	 *             if learner model was not created successfully
-	 */
-	protected abstract void buildInternal(MIMLInstances trainingSet) throws Exception;
-
-	/**
-	 * Gets whether learner's model is initialized by
-	 * {@link #build(MultiLabelInstances)}. This is used to check if
-	 * {@link #makePrediction(weka.core.Instance)} can be processed.
-	 * 
-	 * @return isModelInitialized returns true if the model has been initialized
-	 */
-	protected boolean isModelInitialized() {
-		return isModelInitialized;
-	}
-
+	@Override
 	public final MultiLabelOutput makePrediction(Instance instance)
 			throws Exception, InvalidDataException, ModelInitializationException {
 		if (instance == null) {
@@ -127,35 +106,28 @@ public abstract class MIMLClassifier implements MultiLabelLearner, Serializable 
 			throw new ModelInitializationException("The model has not been trained.");
 		}
 
-		//FALLA SI EN LUGAR DE CREAR UN NUEVO OBJETO SE HACE UN CASTING
 		return makePredictionInternal(new Bag(instance));
 	}
 
-	/**
-	 * Learner specific implementation for predicting on specified data based on
-	 * trained model. This method is called from
-	 * {@link #makePrediction(weka.core.Instance)} which guards for model
-	 * initialization and apply common handling/behavior.
-	 *
-	 * @param instance
-	 *            the data instance to predict on
-	 * @throws Exception
-	 *             if an error occurs while making the prediction.
-	 * @throws InvalidDataException
-	 *             if specified instance data is invalid and can not be
-	 *             processed by the learner
-	 * @return the output of the learner for the given instance
-	 */
-	protected abstract MultiLabelOutput makePredictionInternal(Bag instance) throws Exception, InvalidDataException;
-
-	/**
-	 * Set debugging mode.
-	 *
-	 * @param debug
-	 *            <code>true</code> if debug output should be printed
-	 */
+	@Override
 	public void setDebug(boolean debug) {
 		isDebug = debug;
+	}
+
+	@Override
+	public MultiLabelLearner makeCopy() throws Exception {
+		return (MultiLabelLearner) new SerializedObject(this).getObject();
+	}
+
+	/**
+	 * Gets whether learner's model is initialized by
+	 * {@link #build(MultiLabelInstances)}. This is used to check if
+	 * {@link #makePrediction(weka.core.Instance)} can be processed.
+	 * 
+	 * @return <code>true</code> if the model has been initialized.
+	 */
+	protected boolean isModelInitialized() {
+		return isModelInitialized;
 	}
 
 	/**
@@ -166,7 +138,7 @@ public abstract class MIMLClassifier implements MultiLabelLearner, Serializable 
 	public boolean getDebug() {
 		return isDebug;
 	}
-	
+
 	/**
 	 * Writes the debug message string to the console output if debug for the
 	 * learner is enabled.
@@ -181,16 +153,34 @@ public abstract class MIMLClassifier implements MultiLabelLearner, Serializable 
 		System.err.println("" + new Date() + ": " + msg);
 	}
 
-	public MultiLabelLearner makeCopy() throws Exception {
-		return (MultiLabelLearner) new SerializedObject(this).getObject();
-	}
+	/**
+	 * Learner specific implementation of building the model from
+	 * {@link MultiLabelInstances} training data set. This method is called from
+	 * {@link #build(MultiLabelInstances)} method, where behavior common across
+	 * all learners is applied.
+	 *
+	 * @param trainingSet
+	 *            the training data set.
+	 * @throws Exception
+	 *             if learner model was not created successfully.
+	 */
+	protected abstract void buildInternal(MIMLInstances trainingSet) throws Exception;
 
 	/**
-	 * Returns an instance of a TechnicalInformation object, containing detailed
-	 * information about the technical background of this class, e.g., paper
-	 * reference or book this class is based on.
+	 * Learner specific implementation for predicting on specified data based on
+	 * trained model. This method is called from
+	 * {@link #makePrediction(weka.core.Instance)} which guards for model
+	 * initialization and apply common handling/behavior.
 	 *
-	 * @return the technical information about this class
+	 * @param instance
+	 *            the data instance to predict on.
+	 * @throws Exception
+	 *             if an error occurs while making the prediction.
+	 * @throws InvalidDataException
+	 *             if specified instance data is invalid and can not be
+	 *             processed by the learner.
+	 * @return the output of the learner for the given instance.
 	 */
-	abstract public TechnicalInformation getTechnicalInformation();
+	protected abstract MultiLabelOutput makePredictionInternal(Bag instance) throws Exception, InvalidDataException;
+
 }

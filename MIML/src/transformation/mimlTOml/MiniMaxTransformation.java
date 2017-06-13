@@ -22,10 +22,39 @@ import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
+
 /**
  * 
- * Class that inherits from MIMLToML and uses the minimum and maximum 
- * transformation to convert a MIMLIntances class to a MultiLabel.
+ * Class that performs a miniMaxc transformation to convert a MIMLIntances class
+ * to MultiLabelInstances. Each Bag is transformed into a single Instance in
+ * which, for each attribute of the bag, its min and max value are included. For
+ * instance, For instance, in the relation above, the resulting template is
+ * showed.
+ * 
+ * &#064;relation toy<br>
+ * &#064;attribute id {bag1,bag2}<br>
+ * &#064;attribute bag relational<br>
+ * &#064;attribute f1 numeric<br>
+ * &#064;attribute f2 numeric<br>
+ * &#064;attribute f3 numeric<br>
+ * &#064;end bag<br>
+ * &#064;attribute label1 {0,1}<br>
+ * &#064;attribute label2 {0,1}<br>
+ * &#064;attribute label3 {0,1}<br>
+ * &#064;attribute label4 {0,1}<br>
+ * 
+ * &#064;relation miniMaxTransformation<br>
+ * &#064;attribute id {bag1,bag2}<br>
+ * &#064;attribute f1_min numeric<br>
+ * &#064;attribute f1_max numeric<br>
+ * &#064;attribute f2_min numeric<br>
+ * &#064;attribute f2_max numeric<br>
+ * &#064;attribute f3_min numeric<br>
+ * &#064;attribute f3_max numeric<br>
+ * * &#064;attribute label1 {0,1}<br>
+ * &#064;attribute label2 {0,1}<br>
+ * &#064;attribute label3 {0,1}<br>
+ * &#064;attribute label4 {0,1}<br>
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -35,16 +64,17 @@ import weka.core.Instances;
  */
 public class MiniMaxTransformation extends MIMLtoML {
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
 	 * @param dataset
-	 * 				a MIMLInstances dataset
+	 *            MIMLInstances dataset.
 	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public MiniMaxTransformation(MIMLInstances dataset) throws Exception {
 		this.dataset = dataset;
 		prepareTemplate();
-		template.setRelationName(dataset.getDataSet().relationName()+"_minimax_transformation");
+		template.setRelationName(dataset.getDataSet().relationName() + "_minimax_transformation");
 	}
 
 	@Override
@@ -52,82 +82,82 @@ public class MiniMaxTransformation extends MIMLtoML {
 
 		Instances newData = new Instances(template);
 		int labelIndices[] = dataset.getLabelIndices();
-		Instance newInst = new DenseInstance(newData.numAttributes());		
-		newInst.setDataset(newData);  //Sets the reference to the dataset
+		Instance newInst = new DenseInstance(newData.numAttributes());
+		newInst.setDataset(newData); // Sets the reference to the dataset
 
 		// For all bags in the dataset
 		double nBags = dataset.getNumBags();
 		for (int i = 0; i < nBags; i++) {
 			// retrieves a bag
 			Bag bag = dataset.getBag(i);
-			//sets the bagLabel
+			// sets the bagLabel
 			newInst.setValue(0, bag.value(0));
 
 			// retrieves instances (relational value) for each bag
 			Instances instances = bag.getBagAsInstances();
-			// For all attributes in bag			
+			// For all attributes in bag
 			for (int j = 0, attIdx = 1; j < instances.numAttributes(); j++, attIdx++) {
 				double[] minimax = minimax(instances, j);
 				newInst.setValue(attIdx, minimax[0]);// minima value
-				newInst.setValue(attIdx+instances.numAttributes(), minimax[1]);// maxima value);			
+				newInst.setValue(attIdx + instances.numAttributes(), minimax[1]);// maxima
+																					// value);
 			}
-			//Copy label information into the dataset
-			for(int j=0; j<labelIndices.length; j++)
-			{			
-				newInst.setValue(updatedLabelIndices[j], bag.value(labelIndices[j]));				
+			// Copy label information into the dataset
+			for (int j = 0; j < labelIndices.length; j++) {
+				newInst.setValue(updatedLabelIndices[j], bag.value(labelIndices[j]));
 			}
 			newData.add(newInst);
 
-		}	
+		}
 		return new MultiLabelInstances(newData, dataset.getLabelsMetaData());
 	}
-	
+
 	@Override
 	public Instance transformInstance(Bag bag) throws Exception {
-		int labelIndices[]= dataset.getLabelIndices();
+		int labelIndices[] = dataset.getLabelIndices();
 		Instance newInst = new DenseInstance(template.numAttributes());
-		
-		//sets the bagLabel
-		newInst.setDataset(bag.dataset());  //Sets the reference to the dataset
+
+		// sets the bagLabel
+		newInst.setDataset(bag.dataset()); // Sets the reference to the dataset
 		newInst.setValue(0, bag.value(0));
 
-		// retrieves instances (relational value) 
+		// retrieves instances (relational value)
 		Instances instances = bag.getBagAsInstances();
-		//For all attributes in bag			
-		for (int j = 0, attIdx=1; j < instances.numAttributes(); j++, attIdx++) {
+		// For all attributes in bag
+		for (int j = 0, attIdx = 1; j < instances.numAttributes(); j++, attIdx++) {
 			double[] minimax = minimax(instances, j);
 			newInst.setValue(attIdx, minimax[0]);// minima value
-			newInst.setValue(attIdx+instances.numAttributes(), minimax[1]);// maxima value);
+			newInst.setValue(attIdx + instances.numAttributes(), minimax[1]);// maxima
+																				// value);
 		}
-		
-		//Insert label information into the instance
-		for(int j=0; j<labelIndices.length; j++)
-		{			
-			newInst.setValue(updatedLabelIndices[j], bag.value(labelIndices[j]));				
+
+		// Insert label information into the instance
+		for (int j = 0; j < labelIndices.length; j++) {
+			newInst.setValue(updatedLabelIndices[j], bag.value(labelIndices[j]));
 		}
-		
+
 		return newInst;
 	}
-	
-	protected void prepareTemplate() throws Exception
-	{
-        int attrIndex = 0;		
-				
+
+	protected void prepareTemplate() throws Exception {
+		int attrIndex = 0;
+
 		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 		// insert a bag label attribute at the begining
 		Attribute attr = dataset.getDataSet().attribute(0);
 		attributes.add(attr);
 
 		// Adds attributes for min
-		Instances bags = dataset.getDataSet().attribute(1).relation().stringFreeStructure();;		 
-		for (int i = 0; i < dataset.getNumAtributtesPerBag(); i++) {
+		Instances bags = dataset.getDataSet().attribute(1).relation().stringFreeStructure();
+		;
+		for (int i = 0; i < dataset.getNumAttributesInABag(); i++) {
 			attr = new Attribute("min_" + bags.attribute(i).name());
 			attributes.add(attr);
 			attrIndex++;
 		}
 
 		// Adds attributes for max
-		for (int i = 0; i < dataset.getNumAtributtesPerBag(); i++) {
+		for (int i = 0; i < dataset.getNumAttributesInABag(); i++) {
 			attr = new Attribute("max_" + bags.attribute(i).name());
 			attributes.add(attr);
 			attrIndex++;
@@ -135,20 +165,19 @@ public class MiniMaxTransformation extends MIMLtoML {
 
 		// Insert labels as attributes in the dataset
 		int labelIndices[] = dataset.getLabelIndices();
-		updatedLabelIndices = new int[labelIndices.length];		
+		updatedLabelIndices = new int[labelIndices.length];
 		ArrayList<String> values = new ArrayList<String>(2);
 		values.add("0");
-		values.add("1");		
-		for (int i = 0; i < labelIndices.length; i++)
-		{
+		values.add("1");
+		for (int i = 0; i < labelIndices.length; i++) {
 			attr = new Attribute(dataset.getDataSet().attribute(labelIndices[i]).name(), values);
 			attributes.add(attr);
 			attrIndex++;
 			updatedLabelIndices[i] = attrIndex;
 		}
-		
-		template = new Instances("template2n", attributes, 0);	
-		
+
+		template = new Instances("template2n", attributes, 0);
+
 	}
 
 }

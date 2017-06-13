@@ -21,32 +21,36 @@ import mulan.classifier.MultiLabelOutput;
 import mulan.classifier.transformation.LabelPowerset;
 import mulan.data.MultiLabelInstances;
 import weka.classifiers.Classifier;
-import weka.core.TechnicalInformation;
 
 /**
- * Class inheriting from MIMLClassifier to classify MIMLInstances.
+ * Class inheriting the LP algorithm for MIML data. Each label set in the
+ * dataset is considered as a new class and then single-label classification is
+ * performed.
+ * 
  * @author Ana I. Reyes
  * @author Eva Gibaja
  * @author Amelia Zafra
  * @version 20170507
- *
- *
  */
-public class MIMLLabelPowerset extends MIMLClassifier{
+public class MIMLLabelPowerset extends MIMLClassifier {
 	/** For serialization */
 	private static final long serialVersionUID = 1L;
-	private LabelPowerset LP;	
+
+	/** An LP classifier */
+	private LabelPowerset LP;
+
 	/**
-	 * Constructor
+	 * Constructor.
+	 * 
 	 * @param baseClassifier
-	 * 					Classifier
+	 *            Classifier
 	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public MIMLLabelPowerset(Classifier baseClassifier) throws Exception {
 		super();
 		LP = new LabelPowerset(baseClassifier);
 	}
-
 
 	@Override
 	protected void buildInternal(MIMLInstances dataSet) throws Exception {
@@ -58,12 +62,6 @@ public class MIMLLabelPowerset extends MIMLClassifier{
 	@Override
 	protected MultiLabelOutput makePredictionInternal(Bag bag) throws Exception, InvalidDataException {
 		return LP.makePrediction(bag);
-	}
-
-	@Override
-	public TechnicalInformation getTechnicalInformation() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

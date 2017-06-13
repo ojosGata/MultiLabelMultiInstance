@@ -15,17 +15,20 @@
 package tutorial;
 
 import java.io.File;
+
+import data.Bag;
 import data.MIMLInstances;
 import mimlclassifier.MIMLBinaryRelevance;
+import mulan.classifier.MultiLabelOutput;
 import mulan.evaluation.Evaluation;
 import mulan.evaluation.Evaluator;
-
+import mulan.evaluation.MultipleEvaluation;
 import weka.classifiers.Classifier;
-
+import weka.classifiers.mi.MIBoost;
 
 /**
  * 
- * Class for basic handling of the classifier Binary Relevance
+ * Class for basic handling of the classifier {@link MIMLBinaryRelevance}.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -42,19 +45,16 @@ public class exampleMIMLBinaryRelevance {
 		System.out.println("\t-x xmlPathFileName -> path of xml file.");
 		System.out.println("Example:");
 		System.out.println("\tjava -jar exampleMIMLBinaryRelevance -f data" + File.separator + "toyTrain.arff -g data"
-				+ File.separator +" -x data"+ File.separator + "toy.xml");
+				+ File.separator + " -x data" + File.separator + "toy.xml");
 		System.exit(-1);
 	}
 
-
 	public static void main(String[] args) {
-		
-		
-		try{
+
+		try {
 			// String arffFileNameTrain = Utils.getOption("f", args);
 			// String arffFileNameTest = Utils.getOption("g",args);
 			// String xmlFileName = Utils.getOption("x", args);
-			
 
 			String arffFileNameTrain = "data" + File.separator + "miml_text_data_random_80train.arff";
 			String arffFileNameTest = "data" + File.separator + "miml_text_data_random_20test.arff";
@@ -62,7 +62,7 @@ public class exampleMIMLBinaryRelevance {
 
 			// Parameter checking
 			if (arffFileNameTrain.isEmpty()) {
-			System.out.println("Arff pathName must be specified.");
+				System.out.println("Arff pathName must be specified.");
 				showUse();
 			}
 			if (arffFileNameTest.isEmpty()) {
@@ -77,46 +77,41 @@ public class exampleMIMLBinaryRelevance {
 			// Loads the dataset
 			System.out.println("Loading the dataset....");
 
-			
-			MIMLInstances mimlTrain =  new MIMLInstances(arffFileNameTrain, xmlFileName);			
-			MIMLInstances mimlTest =  new MIMLInstances(arffFileNameTest, xmlFileName);           
-            Classifier  baseLearner = new weka.classifiers.mi.MIBoost();
-            
-            MIMLBinaryRelevance MIMLBR = new MIMLBinaryRelevance(baseLearner);            
-           
-            MIMLBR.setDebug(true);
-            MIMLBR.build(mimlTrain);
-            
-            
-            
-            //Prueba 1
-            /*Bag bag = mimlTrain.getBag(1);
-            MultiLabelOutput prediction = MIMLBR.makePrediction(bag);
-            */
-            
-            /*
-            //Prueba 2
-            Evaluator eval = new Evaluator();
-            MultipleEvaluation results;
-            int numFolds = 2;
-            results = eval.crossValidate(MIMLBR, mimlTrain, numFolds);
-            System.out.println(results);
-            */
-            
-            //Prueba 3
-            Evaluator eval2 = new Evaluator();
-            Evaluation results2 = eval2.evaluate(MIMLBR, mimlTest, mimlTrain);
-          
-            System.out.println(results2);
-            
-            
-            System.out.println("The program has finished.");
-			
-		}catch (IndexOutOfBoundsException ioobe){
-			System.err.println("Exception: Incorrect index of Bag" );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			MIMLInstances mimlTrain = new MIMLInstances(arffFileNameTrain, xmlFileName);
+			MIMLInstances mimlTest = new MIMLInstances(arffFileNameTest, xmlFileName);
+			Classifier baseLearner = new MIBoost();
+
+			MIMLBinaryRelevance MIMLBR = new MIMLBinaryRelevance(baseLearner);
+
+			MIMLBR.setDebug(true);
+			MIMLBR.build(mimlTrain);
+
+			// Evaluates a single instance
+			Bag bag = mimlTrain.getBag(1);
+			MultiLabelOutput prediction = MIMLBR.makePrediction(bag);
+			System.out.println("\nPrediction on a single instance:\n\t" + prediction.toString());
+
+			// Performs a cross validation evaluation
+			Evaluator evalCV = new Evaluator();
+			MultipleEvaluation resultsCV;
+			int numFolds = 2;
+			System.out.println("\nPerforming " + numFolds + "-fold cross-validation:\n");
+			resultsCV = evalCV.crossValidate(MIMLBR, mimlTrain, numFolds);
+			System.out.println("\nResults on cross validation evaluation:\n" + resultsCV);
+
+			// Performs a train-test evaluation
+			Evaluator evalTT = new Evaluator();
+			System.out.println("\nPerforming train-test evaluation:\n");
+			Evaluation resultsTT = evalTT.evaluate(MIMLBR, mimlTest, mimlTrain);
+			System.out.println("\nResults on train test evaluation:\n" + resultsTT);
+
+			System.out.println("The program has finished.");
+
+		} catch (IndexOutOfBoundsException ioobe) {
+			System.err.println("Exception: Incorrect index of Bag.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

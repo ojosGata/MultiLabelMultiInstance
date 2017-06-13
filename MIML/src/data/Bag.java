@@ -22,7 +22,7 @@ import weka.core.Instances;
 
 /**
  * 
- * Class inheriting from DenseInstance to represent miml bags.
+ * Class inheriting from DenseInstance to represent a MIML bag.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -31,75 +31,124 @@ import weka.core.Instances;
  *
  */
 
-public class Bag extends DenseInstance implements Instance{
-	
-	/**For serialization*/
-	private static final long serialVersionUID = 1L;   
+public class Bag extends DenseInstance implements Instance {
 
-    
-	/**Constructor.
-	 * @param instance
-	 * 				The instance become a Bag
-	 */
-	public Bag(Instance instance) throws Exception {	    
-	    super(instance);
-	    m_AttValues = instance.toDoubleArray();
-	    m_Weight = instance.weight();	        
-	    m_Dataset = instance.dataset();	  
-	}	
-	
+	/** For serialization */
+	private static final long serialVersionUID = 1L;
+
 	/**
-	 * Returns an instance of the bag.
+	 * Constructor.
 	 * 
-	 * @param  bagIndex
-	 * 			The number of index 
-	 * @return Instance 
-	 * 			
+	 * @param instance
+	 *            A Weka's Instance to be transformed into a Bag.
+	 * @throws Exception
+	 *             To be handled in an upper level.
+	 * 
 	 */
-	public Instance getInstance(int bagIndex)
-	{		
+	public Bag(Instance instance) throws Exception {
+		super(instance);
+		m_AttValues = instance.toDoubleArray();
+		m_Weight = instance.weight();
+		m_Dataset = instance.dataset();
+	}
+
+	/**
+	 * Returns an instance of the Bag with index bagIndex.
+	 * 
+	 * @param bagIndex
+	 *            The index number.
+	 * @return Instance
+	 * 
+	 */
+	public Instance getInstance(int bagIndex) {
 		return this.relationalValue(1).instance(bagIndex);
 	}
-	
+
 	/**
-	 * Gets the total number of attributes of the bag considering all attributes contained in the relational attribute.
+	 * Gets the total number of attributes of the Bag. This number includes
+	 * attributes corresponding to labels. Instead the relational attribute, the
+	 * number of attributes contained in the relational attribute is considered.
+	 * For instance, in the relation above, the output of the method is 8.<br>
+	 * 
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
 	 * 
 	 * @return int
 	 */
-	public int getNumAttributesWithRelational()
-	{
-		return this.numAttributes()+this.relationalValue(1).numAttributes()-1;
-	}
-	
-	/**
-	 * Gets the number of attributes of an instance in the bag.* 
-	 * @return int
-	 */
-	public int getNumAttributesInABag()
-	{
-		return this.relationalValue(1).numAttributes();
-	}
-	
-	/**
-	 * Gets the number of instances of the bag.
-	 * 
-	 * @return int
-	 */	
-	public int getNumInstances()
-	{
-		return this.relationalValue(1).numInstances();		
+	public int getNumAttributesWithRelational() {
+		return this.numAttributes() + this.relationalValue(1).numAttributes() - 1;
 	}
 
 	/**
-	 * Gets a bag in the form of a set of instances considering just the relational information.
-	 * Identification of bag and information about labels is not included.
+	 * Gets the number of attributes of in the relational attribute of a Bag.
+	 * For instance, in the relation above, the output of the method is 3.<br>
+	 * 
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
+	 * 
+	 * @return int
+	 */
+	public int getNumAttributesInABag() {
+		return this.relationalValue(1).numAttributes();
+	}
+
+	/**
+	 * Gets the number of instances of the Bag.
+	 * 
+	 * @return int
+	 */
+	public int getNumInstances() {
+		return this.relationalValue(1).numInstances();
+	}
+
+	/**
+	 * Gets a bag in the form of a set of instances considering just the
+	 * relational information. Neither the identifier attribute of the Bag nor
+	 * label attributes are included. For instance, given the relation toy
+	 * above, the output of the method is the relation bag.<br>
+	 * 
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
+	 * 
+	 * &#064;relation bag<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
 	 * 
 	 * @return Instances
-	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
-	public Instances getBagAsInstances() throws Exception {				 
-			Instances bags = this.relationalValue(1);
-			return bags;		
+	public Instances getBagAsInstances() throws Exception {
+		Instances bags = this.relationalValue(1);
+		return bags;
 	}
-	
+
 }

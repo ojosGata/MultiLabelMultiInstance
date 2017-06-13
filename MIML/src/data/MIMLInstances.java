@@ -23,11 +23,9 @@ import weka.core.Instance;
 import weka.core.Instances;
 import data.Bag;
 
-
 /**
  * 
- * Class inheriting from the MultiLabelnstances to represent multi-instance
- * multi-label problems.
+ * Class inheriting from MultiLabelnstances to represent MIML data.
  * 
  * @author Ana I. Reyes Melero
  * @author Eva Gibaja
@@ -44,10 +42,11 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * Constructor.
 	 * 
 	 * @param dataSet
-	 *            The set of bags of instances
+	 *            A dataset of {@link Instances} with relational information.
 	 * @param xmlLabelsDefFilePath
-	 *            Path of .xml file with information about labels
+	 *            Path of .xml file with information about labels.
 	 * @throws InvalidDataFormatException
+	 *             To be handled in an upper level.
 	 */
 	public MIMLInstances(Instances dataSet, String xmlLabelsDefFilePath) throws InvalidDataFormatException {
 		super(dataSet, xmlLabelsDefFilePath);
@@ -57,10 +56,11 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * Constructor.
 	 * 
 	 * @param dataSet
-	 *            The set of bags of instances
+	 *            A dataset of {@link Instances} with relational information.
 	 * @param labelsMetaData
-	 *            Information about labels
+	 *            Information about labels.
 	 * @throws InvalidDataFormatException
+	 *             To be handled in an upper level.
 	 */
 	public MIMLInstances(Instances dataSet, LabelsMetaData labelsMetaData) throws InvalidDataFormatException {
 		super(dataSet, labelsMetaData);
@@ -70,10 +70,11 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * Constructor.
 	 * 
 	 * @param arffFilePath
-	 *            Path of .arff file with instances
+	 *            Path of .arff file with Instances.
 	 * @param xmlLabelsDefFilePath
-	 *            Path of .xml file with information about labels
+	 *            Path of .xml file with information about labels.
 	 * @throws InvalidDataFormatException
+	 *             To be handled in an upper level.
 	 */
 	public MIMLInstances(String arffFilePath, String xmlLabelsDefFilePath) throws InvalidDataFormatException {
 		super(arffFilePath, xmlLabelsDefFilePath);
@@ -83,22 +84,25 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * Constructor.
 	 * 
 	 * @param arffFilePath
-	 *            Path of .arff file with instances
+	 *            Path of .arff file with Instances.
 	 * @param numLabelAttributes
-	 *            Number of Attributes
+	 *            Number of label attributes.
 	 * @throws InvalidDataFormatException
+	 *             To be handled in an upper level.
 	 */
 	public MIMLInstances(String arffFilePath, int numLabelAttributes) throws InvalidDataFormatException {
 		super(arffFilePath, numLabelAttributes);
 	}
 
 	/**
-	 * Gets a bag or pattern from MultiLabel instances from a index
+	 * Gets a {@link Bag} (i.e. pattern) with a certain bagIndex.
 	 * 
 	 * @param bagIndex
-	 *            Index of bag
-	 * @return a bag or an instance from the index of the dataset
+	 *            Index of the bag.
+	 * @return Bag If bagIndex exceeds the number of bags in the dataset. To be
+	 *         handled in an upper level.
 	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public Bag getBag(int bagIndex) throws Exception {
 		if (bagIndex > this.getNumBags())
@@ -111,40 +115,43 @@ public class MIMLInstances extends MultiLabelInstances {
 	}
 
 	/**
-	 * Gets a bag from a index in the form of a set of instances considering just the relational information.
-	 * Identification of bag and information about labels is not included.
+	 * Gets a {@link Bag} with a certain bagIndex in the form of a set of
+	 * {@link Instances} considering just the relational information. Neither
+	 * identification attribute of the Bag nor label attributes are included.
 	 * 
 	 * @param bagIndex
-	 *            Index of bag
+	 *            Index of the bag
 	 * @return a bag or an instance from the index of the dataset
-	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 * @throws Exception
+	 *             If bagIndex exceeds the number of bags in the dataset. To be
+	 *             handled in an upper level.
 	 */
 	public Instances getBagAsInstances(int bagIndex) throws Exception {
 		if (bagIndex > this.getNumBags())
 			throw new Exception("Out of bounds bagIndex: " + bagIndex + ". Actual numberOfBags: " + this.getNumBags());
-		else {			 
+		else {
 			Instances bags = getBag(bagIndex).getBagAsInstances();
 			return bags;
 		}
 	}
 
 	/**
-	 * Adds a bag of instances to the dataset.
+	 * Adds a Bag of Instances to the dataset.
 	 *
 	 * @param bag
-	 *            A bag of instances.
+	 *            A Bag of Instances.
 	 */
 	public void addBag(Bag bag) {
 		this.getDataSet().add(bag);
 	}
 
 	/**
-	 * Adds a bag of instances to the dataset in a certain index.
+	 * Adds a Bag of Instances to the dataset in a certain index.
 	 * 
 	 * @param bag
-	 *            A bag of instanes
+	 *            A Bag of Instances.
 	 * @param index
-	 *            The index to insert the new bag
+	 *            The index to insert the Bag.
 	 */
 	public void addInstance(Bag bag, int index) {
 		this.getDataSet().add(index, bag);
@@ -154,20 +161,21 @@ public class MIMLInstances extends MultiLabelInstances {
 	 * Gets an instance of a bag.
 	 * 
 	 * @param bagIndex
-	 *            The index of the bag of the data set
+	 *            The index of the bag in the data set,
 	 * @param instanceIndex
-	 *            Is the index of the instance
+	 *            Is the index of the instance in the bag.
 	 * @return Instance
 	 * @throws IndexOutOfBoundsException
+	 *             To be handled in an upper level.
 	 */
 	public Instance getInstance(int bagIndex, int instanceIndex) throws IndexOutOfBoundsException {
 		return this.getDataSet().instance(bagIndex).relationalValue(1).instance(instanceIndex);
 	}
 
 	/**
-	 * Gets the number of bags of the miml dataset.
+	 * Gets the number of bags of the dataset.
 	 * 
-	 * @return a number of bags
+	 * @return int
 	 */
 	public int getNumBags() {
 		return this.getNumInstances();
@@ -176,29 +184,32 @@ public class MIMLInstances extends MultiLabelInstances {
 	/**
 	 * Gets the number of instances of a bag.
 	 * 
-	 * @param bag
-	 *            A bag of instances
-	 * @return int
-	 */
-	public int getNumInstances(Bag bag) {
-		return bag.relationalValue(1).numInstances();
-	}
-
-	/**
-	 * Gets the number of instances of a bag.
-	 * 
 	 * @param bagIndex
-	 *            A bag index
+	 *            A bag index.
 	 * @return int
-	 * @throws Exception Potential exception thrown. To be handled in an upper level.
+	 * @throws Exception
+	 *             To be handled in an upper level.
 	 */
 	public int getNumInstances(int bagIndex) throws Exception {
 		return this.getBag(bagIndex).relationalValue(1).numInstances();
 	}
 
 	/**
-	 * Gets the number of attributes of the dataset considering relational
-	 * attribute with bags as a single attribute.
+	 * Gets the number of attributes of the dataset considering label attributes
+	 * and the relational attribute with bags as a single attribute. For
+	 * instance, in relation above, the returned value is 6.
+	 * 
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
 	 * 
 	 * @return int
 	 */
@@ -207,22 +218,50 @@ public class MIMLInstances extends MultiLabelInstances {
 	}
 
 	/**
-	 * Gets the total number of attributes of the dataset considering all
-	 * attributes of bags contained in the relational attribute.
+	 * Gets the total number of attributes of the dataset. This number includes
+	 * attributes corresponding to labels. Instead the relational attribute, the
+	 * number of attributes contained in the relational attribute is considered.
+	 * For instance, in the relation above, the output of the method is 8.<br>
+	 * 
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
+	 * 
 	 * 
 	 * @return int
 	 */
 	public int getNumAttributesWithRelational() {
-		return this.getDataSet().numAttributes() + this.getNumAtributtesPerBag() - 1;
+		return this.getDataSet().numAttributes() + this.getNumAttributesInABag() - 1;
 	}
 
 	/**
-	 * Gets the number of attributes per bag. In miml all bags have the same
-	 * number of attributes.
+	 * Gets the number of attributes per bag. In MIML all bags have the same
+	 * number of attributes.* For instance, in the relation above, the output of
+	 * the method is 3.<br>
+	 * 
+	 * &#064;relation toy<br>
+	 * &#064;attribute id {bag1,bag2}<br>
+	 * &#064;attribute bag relational<br>
+	 * &#064;attribute f1 numeric<br>
+	 * &#064;attribute f2 numeric<br>
+	 * &#064;attribute f3 numeric<br>
+	 * &#064;end bag<br>
+	 * &#064;attribute label1 {0,1}<br>
+	 * &#064;attribute label2 {0,1}<br>
+	 * &#064;attribute label3 {0,1}<br>
+	 * &#064;attribute label4 {0,1}<br>
 	 * 
 	 * @return int
 	 */
-	public int getNumAtributtesPerBag() {
+	public int getNumAttributesInABag() {
 		return this.getDataSet().instance(0).relationalValue(1).numAttributes();
 	}
 
