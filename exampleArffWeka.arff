@@ -1,0 +1,10 @@
+@relation relationName
+
+@attribute value1 numeric
+@attribute value2 numeric
+@attribute value3 numeric
+@attribute class {0 , 1}
+
+@data
+1.2,2.3,3.4,1
+5.6,6.7,7.8,0
